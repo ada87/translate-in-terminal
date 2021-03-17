@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+let text = process.argv.slice(2).filter(item => item.trim().length > 0).join(' ').trim();
+require('colors');
+if (text.length == 0) {
+  console.log(' 请输入一段文字进行翻译, '.red, '例如：'.grey);
+  console.log(' $ >'.grey, 't'.yellow.bgGray + ' 你好，世界'.brightCyan.bgGray);
+  console.log();
+  console.log(' Please enter a paragraph for translation, '.red, 'For example: '.grey);
+  console.log(' $ >'.grey, 't'.yellow.bgGray + ' Hello, World!'.brightCyan.bgGray);
+  return;
+} else if (text.length > 200) {
+  console.log(' 一次最多输入200个字 '.red);
+  console.log(' Enter up to 200 words at a time '.red);
+  return;
+
+}
+const REG_CN = new RegExp('[\\u4E00-\\u9FA5]|[\\uFE30-\\uFFA0]');
+let isCN = REG_CN.test(text);
+
+let TIP = isCN ? {
+  START: '·开始翻译 : ',
+  RESULT: '·翻译结果 : ',
+  ERROR: '·翻译失败，出了些问题，请稍后再试'
+} : {
+  START: '·Translation text   : ',
+  RESULT: '·Translation result : ',
+  ERROR: '·Translation Error, Please try later.'
+}
+console.log(`${TIP.START}`.grey + `${text}`);
+const axios = require('axios');
+
+axios.request({ url: 'https://api.xdnote.com/open/translation', method: 'POST', timeout: 15000, data: { text } }).then(resp => {
+  if (resp.status == 200 && resp.data) {
+    if (resp.data.code == '0') {
+      console.log(`${TIP.RESULT}`.grey + `${resp.data.data}`.bold);
+    } else {
+      console.log(`${TIP.ERROR}`.grey) + ` ${resp.data.message}.red`;
+    }
+  } else {
+    console.log(`${TIP.ERROR}`.red);
+  }
+}).catch(err => {
+  console.log(`${TIP.ERROR}`.red);
+})

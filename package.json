@@ -1,0 +1,26 @@
+{
+  "name": "translate-in-terminal",
+  "version": "1.1.0",
+  "description": "Translate in Terminal, 命令行翻译小工具",
+  "bin": {
+    "t": "./bin/t"
+  },
+  "keywords": [
+    "Translate",
+    "tool"
+  ],
+  "author": "ada87",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "colors": "^1.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ada87/translate-in-terminal.git",
+  },
+  "homepage": "https://github.com/ada87/translate-in-terminal",
+  "files": [
+    "bin"
+  ]
+}
